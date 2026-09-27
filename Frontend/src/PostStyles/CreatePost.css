@@ -1,0 +1,253 @@
+/* CreatePost.css */
+
+.create-post-page {
+    min-height: 100vh;
+    background: #000;
+    color: #fff;
+    padding-bottom: 40px;
+}
+
+/* ================= TOP BAR ================= */
+
+.create-post-topbar {
+    height: 60px;
+    display: grid;
+    grid-template-columns: 50px 1fr 50px;
+    align-items: center;
+
+    padding: 0 20px;
+
+    background: #000;
+    border-bottom: 1px solid #222;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.create-post-topbar h1 {
+    margin: 0;
+    text-align: center;
+
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.back-btn {
+    display: flex;
+    align-items: center;
+
+    color: #fff;
+    text-decoration: none;
+
+    width: fit-content;
+}
+
+.back-btn:hover {
+    color: #aaa;
+}
+
+
+/* ================= FORM ================= */
+
+.create-post-form {
+    width: 100%;
+    max-width: 700px;
+
+    margin: 30px auto;
+    padding: 0 25px;
+
+    box-sizing: border-box;
+}
+
+
+/* ================= FORM SECTION ================= */
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.form-label,
+.form-section > label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ddd;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* ================= FILE INPUT ================= */
+
+.form-section input[type="file"] {
+    width: 100%;
+    padding: 12px;
+
+    box-sizing: border-box;
+
+    background: #111;
+    color: #aaa;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.form-section input[type="file"]::file-selector-button {
+    background: #222;
+    color: #fff;
+
+    border: none;
+    border-radius: 6px;
+
+    padding: 8px 12px;
+
+    margin-right: 10px;
+
+    cursor: pointer;
+}
+
+.form-section input[type="file"]::file-selector-button:hover {
+    background: #333;
+}
+
+
+/* ================= TEXT INPUT ================= */
+
+.form-section input[type="text"],
+.form-section input[type="number"],
+.form-section textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    background: #111;
+    color: #fff;
+
+    border: 1px solid #333;
+    border-radius: 8px;
+
+    padding: 12px;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.form-section input[type="text"]:focus,
+.form-section input[type="number"]:focus,
+.form-section textarea:focus {
+    border-color: #666;
+    background: #151515;
+}
+
+.form-section input::placeholder,
+.form-section textarea::placeholder {
+    color: #666;
+}
+
+
+/* ================= TEXTAREA ================= */
+
+.form-section textarea {
+    resize: vertical;
+    min-height: 120px;
+
+    font-family: inherit;
+}
+
+
+/* ================= PUBLISH ================= */
+
+.publish-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 10px 0 25px;
+
+    color: #ddd;
+    font-size: 14px;
+}
+
+.publish-section input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+
+    cursor: pointer;
+
+    accent-color: #fff;
+}
+
+
+/* ================= SUBMIT BUTTON ================= */
+
+.submit-post-btn {
+    width: 100%;
+
+    padding: 13px;
+
+    background: #fff;
+    color: #000;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.submit-post-btn:hover {
+    background: #ddd;
+}
+
+.submit-post-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 600px) {
+
+    .create-post-topbar {
+        height: 55px;
+        padding: 0 12px;
+    }
+
+    .create-post-topbar h1 {
+        font-size: 18px;
+    }
+
+    .create-post-form {
+        margin-top: 20px;
+        padding: 0 15px;
+    }
+
+    .form-section {
+        margin-bottom: 18px;
+    }
+
+    .form-section input[type="file"],
+    .form-section input[type="text"],
+    .form-section input[type="number"],
+    .form-section textarea {
+        font-size: 13px;
+    }
+
+    .submit-post-btn {
+        padding: 12px;
+    }
+}

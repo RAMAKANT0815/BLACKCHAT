@@ -1,0 +1,164 @@
+/* MyPosts.css */
+
+.my-posts-page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  padding-bottom: 30px;
+}
+
+/* Top bar */
+.my-posts-topbar {
+  height: 60px;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #222;
+  background: #000;
+}
+
+.my-posts-topbar h1 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.back-btn {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+/* Grid */
+.my-posts-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  margin-top: 3px;
+}
+
+/* Each post */
+.my-post-card {
+  background: #111;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Thumbnail */
+.post-thumbnail {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  background: #181818;
+}
+
+.post-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.my-post-card:hover .post-thumbnail img {
+  transform: scale(1.04);
+}
+
+/* REEL badge */
+.post-type {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Post information */
+.post-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 5px;
+}
+
+.post-info h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-info p {
+  margin: 0;
+  color: #888;
+  font-size: 11px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Three dot button */
+.post-menu {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.post-menu:hover {
+  color: #fff;
+}
+
+/* Views and duration */
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px 10px;
+  color: #777;
+  font-size: 11px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .my-posts-topbar {
+    height: 55px;
+    padding: 0 12px;
+  }
+
+  .my-posts-topbar h1 {
+    font-size: 18px;
+  }
+
+  .my-posts-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .post-info,
+  .post-meta {
+    display: none;
+  }
+
+  .post-type {
+    top: 5px;
+    right: 5px;
+    font-size: 8px;
+    padding: 3px 5px;
+  }
+}

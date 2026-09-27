@@ -1,0 +1,372 @@
+.user-profile-page {
+    min-height: 100vh;
+    background: #000;
+    color: #fff;
+    padding: 30px 50px;
+    position: relative;
+}
+
+
+/* Back button */
+
+.user-profile-back {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+
+    width: 45px;
+    height: 45px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #1c1c1c;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.user-profile-back:hover {
+    background: #333;
+}
+
+
+/* Profile header */
+
+.user-profile-header {
+    max-width: 900px;
+    margin: 60px auto 40px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 70px;
+}
+
+
+/* Avatar */
+
+.user-profile-avatar-section {
+    flex-shrink: 0;
+}
+
+.user-profile-avatar {
+    width: 170px;
+    height: 170px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 3px solid #333;
+}
+
+
+/* User information */
+
+.user-profile-info {
+    flex: 1;
+}
+
+.user-profile-info h1 {
+    margin: 0 0 10px;
+
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.user-profile-info p {
+    margin: 0 0 25px;
+
+    color: #aaa;
+    font-size: 15px;
+}
+
+
+/* Stats */
+
+.user-profile-stats {
+    display: flex;
+    gap: 40px;
+
+    margin-bottom: 25px;
+}
+
+.user-profile-stats div {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-profile-stats strong {
+    font-size: 20px;
+}
+
+.user-profile-stats span {
+    color: #999;
+    font-size: 13px;
+}
+
+
+/* Buttons */
+
+.user-profile-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.user-profile-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* Follow */
+
+.follow-user-btn {
+    background: #fff;
+    color: #000;
+}
+
+.follow-user-btn:hover {
+    background: #ddd;
+}
+
+
+/* Chat */
+
+.chat-user-btn {
+    background: #222;
+    color: #fff;
+
+    border: 1px solid #444 !important;
+}
+
+.chat-user-btn:hover {
+    background: #333;
+}
+
+
+/* Posts section */
+
+.user-profile-post-section {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.user-profile-post-section h2 {
+    font-size: 20px;
+
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #333;
+
+    padding-bottom: 15px;
+}
+
+
+/* Post grid */
+
+.user-profile-post-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 5px;
+}
+
+
+/* Post */
+
+.user-profile-post {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    background: #111;
+}
+
+.user-profile-post img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.2s ease;
+}
+
+.user-profile-post:hover img {
+    transform: scale(1.05);
+}
+
+
+/* No posts */
+
+.no-posts {
+    grid-column: 1 / -1;
+
+    text-align: center;
+
+    color: #777;
+
+    padding: 50px 0;
+}
+
+
+/* Loading */
+
+.user-profile-loading {
+    width: 100%;
+    min-height: 100vh;
+
+    background: #000;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .user-profile-page {
+        padding: 20px;
+    }
+
+    .user-profile-header {
+        margin-top: 70px;
+
+        flex-direction: column;
+
+        gap: 25px;
+
+        text-align: center;
+    }
+
+    .user-profile-avatar {
+        width: 130px;
+        height: 130px;
+    }
+
+    .user-profile-info p {
+        margin-bottom: 20px;
+    }
+
+    .user-profile-stats {
+        justify-content: center;
+        gap: 35px;
+    }
+
+    .user-profile-actions {
+        justify-content: center;
+    }
+
+    .user-profile-post-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+    }
+
+}
+
+.shadow-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.shadow-modal {
+    width: 400px;
+    max-width: 90%;
+
+    max-height: 70vh;
+    overflow-y: auto;
+
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.shadow-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+.shadow-modal-header button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.shadow-user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.shadow-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.shadow-user:hover {
+    background: #f2f2f2;
+}
+
+.shadow-user img {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.shadow-user h3 {
+    margin: 0;
+}
+
+.shadow-user p {
+    margin: 4px 0 0;
+
+    color: #777;
+    font-size: 14px;
+}

@@ -1,0 +1,202 @@
+.reel-page {
+    width: 100%;
+    height: 100vh;
+    background: #000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Back Button */
+.reel-back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+
+    color: white;
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+.reel-back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Main Reel Container */
+.reel-container {
+    height: 95vh;
+    width: 500px;
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: width 0.3s ease;
+}
+
+
+/* When CommentPost is open */
+.reel-container.comment-open {
+    width: 900px;
+}
+
+
+/* Video */
+.reel-video {
+    width: 500px;
+    height: 95vh;
+
+    object-fit: contain;
+
+    background: #000;
+    border-radius: 8px;
+}
+
+
+/* Post Information */
+.reel-info {
+    position: absolute;
+
+    left: 20px;
+    bottom: 35px;
+
+    width: 75%;
+
+    color: white;
+
+    z-index: 2;
+
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.reel-info h3 {
+    margin: 0 0 8px;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.reel-info p {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    color: #eee;
+}
+
+
+/* Right Side Actions */
+.reel-actions {
+    position: absolute;
+
+    right: -75px;
+    bottom: 35px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 22px;
+
+    z-index: 5;
+}
+
+.reel-actions button {
+    background: transparent;
+    border: none;
+
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease;
+}
+
+.reel-actions button:hover {
+    transform: scale(1.1);
+}
+
+.reel-actions span {
+    font-size: 12px;
+    color: white;
+}
+
+
+/* Loading */
+.reel-loading {
+    width: 100%;
+    height: 100vh;
+
+    background: #000;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 18px;
+}
+
+
+/* Mobile */
+@media (max-width: 700px) {
+
+    .reel-container {
+        width: 100%;
+        height: 100vh;
+    }
+
+    .reel-container.comment-open {
+        width: 100%;
+    }
+
+    .reel-video {
+        width: 100%;
+        height: 100vh;
+
+        border-radius: 0;
+    }
+
+    .reel-actions {
+        right: 15px;
+        bottom: 100px;
+    }
+
+    .reel-info {
+        left: 15px;
+        bottom: 30px;
+        width: 70%;
+    }
+
+    .reel-back-btn {
+        top: 15px;
+        left: 15px;
+    }
+}

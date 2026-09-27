@@ -1,0 +1,250 @@
+/* Base container covering the full height, centered like a mobile app */
+.profile-page {
+    min-height: 100vh;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    border-left: 1px solid #111111;
+    border-right: 1px solid #111111;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* Top Navigation Bar */
+.profile-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.profile-topbar h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.menu-icon {
+    cursor: pointer;
+    color: #ffffff;
+    transition: opacity 0.2s ease;
+}
+
+.menu-icon:hover {
+    opacity: 0.7;
+}
+
+/* Header: Avatar and Stats */
+.profile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.avatar-container {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333333;
+}
+
+/* Edit Avatar Pencil Icon */
+.avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 50%;
+    padding: 6px;
+    display: flex;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease;
+}
+
+.avatar-edit:hover {
+    transform: scale(1.1);
+}
+
+.avatar-edit svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Stats (Followers/Following) */
+.profile-stats {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.stat p {
+    margin: 5px 0 0 0;
+    font-size: 0.85rem;
+    color: #aaaaaa;
+    text-transform: lowercase;
+}
+
+.stat-divider {
+    height: 35px;
+    width: 1px;
+    background-color: #333333;
+}
+
+/* Action Buttons */
+.profile-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px 20px;
+}
+
+.edit-profile-btn, .logout-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.edit-profile-btn {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ffffff;
+}
+
+.edit-profile-btn:hover {
+    background-color: #e6e6e6;
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #333333;
+}
+
+.logout-btn:hover {
+    background-color: #111111;
+    border-color: #555555;
+}
+
+/* Tab Navigation */
+.profile-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.profile-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+    cursor: pointer;
+    color: #555555; /* Dimmed when inactive */
+    transition: color 0.2s ease;
+}
+
+.profile-tab.active {
+    color: #ffffff; /* Bright white when active */
+    border-bottom: 2px solid #ffffff;
+}
+
+.profile-tab span {
+    font-size: 0.7rem;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Image Grids (Instagram style) */
+.posts-grid, .likes-grid, .comments-grid, .saved-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px; /* Small gap between images */
+}
+
+.post {
+    aspect-ratio: 1 / 1; /* Forces perfect squares */
+    background-color: #111111; /* Placeholder color before image loads */
+    position: relative;
+    overflow: hidden;
+}
+
+.post img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.profile-menu {
+    position: relative;
+}
+
+.menu-icon {
+    cursor: pointer;
+}
+
+.menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 45px;
+
+    width: 180px;
+
+    background: #181818;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    padding: 8px;
+
+    z-index: 100;
+}
+
+.menu-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px;
+
+    color: white;
+    text-decoration: none;
+
+    border-radius: 7px;
+}
+
+.menu-dropdown a:hover {
+    background: #292929;
+}

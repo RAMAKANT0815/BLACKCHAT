@@ -1,0 +1,115 @@
+/* Base container covering the full screen */
+.form-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000; /* Pure black background */
+    color: #ffffff;
+    font-family: sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Center box styling */
+.container {
+    width: 100%;
+    max-width: 400px; /* Keeps the form compact and focused */
+}
+
+.form-content {
+    background-color: #0a0a0a; /* Slightly lighter black for depth */
+    border: 1px solid #222222;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form h2 {
+    margin: 0 0 10px 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Inputs styled for dark mode */
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group input {
+    background-color: #111111;
+    border: 1px solid #333333;
+    color: #ffffff;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-group input::placeholder {
+    color: #555555;
+}
+
+.input-group input:focus {
+    border-color: #ffffff;
+}
+
+/* High-contrast submit button */
+.authBtn {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: opacity 0.2s ease;
+    width: 100%;
+}
+
+.authBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.authBtn:disabled {
+    background-color: #333333;
+    color: #777777;
+    cursor: not-allowed;
+}
+
+/* Link styling */
+.form-links {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #aaaaaa;
+}
+
+.pointer {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: text-decoration 0.2s ease;
+}
+
+.pointer:hover {
+    text-decoration: underline;
+}
