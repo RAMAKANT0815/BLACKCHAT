@@ -1,0 +1,79 @@
+.message-row {
+    width: 100%;
+
+    display: flex;
+
+    box-sizing: border-box;
+}
+
+/* ================= SENT ================= */
+
+.message-sent {
+    justify-content: flex-end;
+}
+
+/* ================= RECEIVED ================= */
+
+.message-received {
+    justify-content: flex-start;
+}
+
+/* ================= BUBBLE ================= */
+
+.message-bubble {
+    max-width: 65%;
+    min-width: 50px;
+
+    padding: 9px 12px;
+
+    box-sizing: border-box;
+
+    border-radius: 12px;
+
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= YOUR MESSAGE ================= */
+
+.message-sent .message-bubble {
+    background: #111111;
+    color: #ffffff;
+
+    border-bottom-right-radius: 3px;
+}
+
+/* ================= OTHER USER ================= */
+
+.message-received .message-bubble {
+    background: #ffffff;
+    color: #111111;
+
+    border: 1px solid #e5e5e5;
+
+    border-bottom-left-radius: 3px;
+}
+
+/* ================= TEXT ================= */
+
+.message-content {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* ================= TIME ================= */
+
+.message-time {
+    margin-top: 4px;
+
+    font-size: 10px;
+
+    text-align: right;
+
+    opacity: 0.6;
+}

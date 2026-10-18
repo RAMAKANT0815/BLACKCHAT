@@ -25,18 +25,6 @@ const userSchema = new Schema(
             default: "",
             trim: true
         },
-        followers: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "User"
-            }
-        ],
-        following: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "User"
-            }
-        ],
         savedPosts: [
             {
                 type: Schema.Types.ObjectId,

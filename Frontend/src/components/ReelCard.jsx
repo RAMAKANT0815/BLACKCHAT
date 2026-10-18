@@ -17,7 +17,7 @@ import { toggleLike } from "../features/like/likeSlice";
 
 import CommentPost from "../Comment/CommentPost";
 
-import "../PostStyles/ReelCard.css";
+
 
 function ReelCard({ post }) {
 

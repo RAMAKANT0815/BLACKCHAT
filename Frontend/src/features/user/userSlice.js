@@ -162,7 +162,9 @@ export const loadUser = createAsyncThunk(
   "user/loadUser",
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get("/api/v1/profile");
+      const { data } = await axios.get("/api/v1/profile", {
+            withCredentials: true
+        });
 
       return data;
     } catch (error) {
@@ -179,7 +181,7 @@ export const getPublicUserProfile = createAsyncThunk(
     async (userId, { rejectWithValue }) => {
         try {
             const res = await axios.get(
-                `/api/v1/profile/${userId}`,
+                `/api/v1/user/${userId}`,
                 {
                     withCredentials: true
                 }
@@ -221,6 +223,7 @@ const userSlice = createSlice({
     name: "user",
     initialState: {
         user: null,
+        selectedUser: null,
         posts: [],
         likes: [],
         comments: [],

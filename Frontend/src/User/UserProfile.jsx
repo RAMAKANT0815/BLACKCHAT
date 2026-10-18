@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import {
     ArrowLeft,
@@ -16,8 +16,11 @@ import { getPublicUserProfile } from "../features/user/userSlice";
 import { getAllPosts } from "../features/post/postSlice";
 
 import {
-    toggleShadow,
-    getShadowCount
+    shadowUser,
+    unshadowUser,
+    getShadowStatus,
+    getShadows,
+    getShadowing
 } from "../features/shadow/shadowSlice";
 
 import "../UserStyles/UserProfile.css";
@@ -32,36 +35,66 @@ function UserProfile() {
     const navigate = useNavigate();
 
 
+    // =========================
+    // USER STATE
+    // =========================
+
     const {
         selectedUser,
         loading
     } = useSelector((state) => state.user);
 
 
+    // =========================
+    // SHADOW STATE
+    // =========================
+
     const {
-        isShadowing,
-        shadowCount,
-        shadowingCount
+        shadowStatusByUser,
+        shadowsByUser,
+        shadowingByUser,
+        loadingByUser
     } = useSelector((state) => state.shadow);
 
+
+    const isShadowing =
+        shadowStatusByUser[userId] || false;
+
+    const isShadowLoading =
+        loadingByUser[userId] || false;
+
+
+    // =========================
+    // POSTS
+    // =========================
 
     const { posts } = useSelector(
         (state) => state.post
     );
 
 
-    // Follow / Unfollow
+    // =========================
+    // GET SHADOW COUNT
+    // =========================
 
-    const handleFollow = () => {
-        dispatch(toggleShadow(userId));
-    };
+    const shadowCount =
+        shadowsByUser[userId]?.length || 0;
+
+    const shadowingCount =
+        shadowingByUser[userId]?.length || 0;
 
 
-    // Get user profile + posts + shadow counts
+    // =========================
+    // GET PROFILE + POSTS
+    // =========================
 
     useEffect(() => {
 
-        dispatch(getPublicUserProfile(userId));
+        if (!userId) return;
+
+        dispatch(
+            getPublicUserProfile(userId)
+        );
 
         dispatch(
             getAllPosts({
@@ -69,38 +102,102 @@ function UserProfile() {
             })
         );
 
-        dispatch(getShadowCount(userId));
+        dispatch(
+            getShadowStatus(userId)
+        );
+
+        dispatch(
+            getShadows(userId)
+        );
+
+        dispatch(
+            getShadowing(userId)
+        );
 
     }, [dispatch, userId]);
 
 
-    // Open post
+    // =========================
+    // SHADOW / UNSHADOW
+    // =========================
+
+    const handleFollow = () => {
+
+        if (isShadowing) {
+
+            dispatch(
+                unshadowUser(userId)
+            );
+
+        } else {
+
+            dispatch(
+                shadowUser(userId)
+            );
+
+        }
+    };
+
+
+    // =========================
+    // OPEN POST
+    // =========================
 
     const handlePostClick = (postId) => {
+
         navigate(`/post/${postId}`);
+
     };
 
 
-    // Open chat
+    // =========================
+    // OPEN CHAT
+    // =========================
 
-    const handleChat = () => {
-        navigate(`/chat/${selectedUser?._id}`);
-    };
+    
+const handleChat = () => {
+    if (!selectedUser?._id) {
+        console.log("User ID not found");
+        return;
+    }
+
+    navigate("/chat", {
+        state: {
+            selectedUser
+        }
+    });
+};
 
 
-    // Open Shadows list
+    // =========================
+    // OPEN SHADOWS
+    // =========================
 
     const handleShadows = () => {
-        navigate(`/user/${userId}/shadows`);
+
+        navigate(
+            `/user/${userId}/shadows`
+        );
+
     };
 
 
-    // Open Shadowing list
+    // =========================
+    // OPEN SHADOWING
+    // =========================
 
     const handleShadowing = () => {
-        navigate(`/user/${userId}/shadowing`);
+
+        navigate(
+            `/user/${userId}/shadowing`
+        );
+
     };
 
+
+    // =========================
+    // LOADING
+    // =========================
 
     if (loading) {
 
@@ -112,6 +209,10 @@ function UserProfile() {
 
     }
 
+
+    // =========================
+    // UI
+    // =========================
 
     return (
 
@@ -130,6 +231,7 @@ function UserProfile() {
             {/* Profile */}
 
             <div className="user-profile-header">
+
 
                 {/* Avatar */}
 
@@ -165,15 +267,18 @@ function UserProfile() {
 
                     <div className="user-profile-stats">
 
+
                         {/* Shadows */}
 
                         <div
                             onClick={handleShadows}
-                            style={{ cursor: "pointer" }}
+                            style={{
+                                cursor: "pointer"
+                            }}
                         >
 
                             <strong>
-                                {shadowCount || 0}
+                                {shadowCount}
                             </strong>
 
                             <span>
@@ -187,11 +292,13 @@ function UserProfile() {
 
                         <div
                             onClick={handleShadowing}
-                            style={{ cursor: "pointer" }}
+                            style={{
+                                cursor: "pointer"
+                            }}
                         >
 
                             <strong>
-                                {shadowingCount || 0}
+                                {shadowingCount}
                             </strong>
 
                             <span>
@@ -207,18 +314,24 @@ function UserProfile() {
 
                     <div className="user-profile-actions">
 
+
+                        {/* Shadow button */}
+
                         <button
                             className={`follow-user-btn ${
-                                isShadowing ? "following" : ""
+                                isShadowing
+                                    ? "following"
+                                    : ""
                             }`}
                             onClick={handleFollow}
-                            disabled={loading}
+                            disabled={isShadowLoading}
                         >
 
                             {isShadowing ? (
 
                                 <>
                                     <UserMinus size={18} />
+
                                     Unshadow
                                 </>
 
@@ -226,6 +339,7 @@ function UserProfile() {
 
                                 <>
                                     <UserPlus size={18} />
+
                                     Shadow
                                 </>
 
@@ -233,6 +347,8 @@ function UserProfile() {
 
                         </button>
 
+
+                        {/* Chat button */}
 
                         <button
                             className="chat-user-btn"
@@ -256,7 +372,10 @@ function UserProfile() {
 
             <div className="user-profile-post-section">
 
-                <h2>Posts</h2>
+                <h2>
+                    Posts
+                </h2>
+
 
                 <div className="user-profile-post-grid">
 
@@ -268,7 +387,9 @@ function UserProfile() {
                                 className="user-profile-post"
                                 key={post._id}
                                 onClick={() =>
-                                    handlePostClick(post._id)
+                                    handlePostClick(
+                                        post._id
+                                    )
                                 }
                             >
 
@@ -294,6 +415,7 @@ function UserProfile() {
             </div>
 
         </div>
+
     );
 }
 

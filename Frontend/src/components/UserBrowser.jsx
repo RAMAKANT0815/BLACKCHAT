@@ -1,23 +1,32 @@
 import React, { useEffect } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {
-    getRandomUsers,
     getShadows,
     getShadowing,
     getMultipleShadowStatus,
     shadowUser,
     unshadowUser
 } from "../features/shadow/shadowSlice";
+import { getRandomUsers } from "../features/user/userSlice";
 
-import "./UserBrowser.css";
+import "../componentStyles/UserBrowser.css";
 
 function UserBrowser({ type, userId }) {
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const params = useParams();
+
+    // Logged-in user
+    const { user } = useSelector((state) => state.user);
+
+    // For profile pages use logged-in user,
+    // for /user/:userId pages use URL userId
+    const currentUserId = userId || params.userId || user?._id;
 
     const {
-        randomUsers,
         shadowsByUser,
         shadowingByUser,
         shadowStatusByUser,
@@ -26,29 +35,30 @@ function UserBrowser({ type, userId }) {
         error
     } = useSelector((state) => state.shadow);
 
+    const { randomUsers } = useSelector((state) => state.user);
+
 
     // =========================
     // FETCH LIST
     // =========================
 
     useEffect(() => {
-
         if (type === "random") {
             dispatch(getRandomUsers());
             return;
         }
 
-        if (!userId) return;
+        if (!currentUserId) return;
 
         if (type === "shadows") {
-            dispatch(getShadows(userId));
+            dispatch(getShadows(currentUserId));
         }
 
         if (type === "shadowing") {
-            dispatch(getShadowing(userId));
+            dispatch(getShadowing(currentUserId));
         }
 
-    }, [dispatch, type, userId]);
+    }, [dispatch, type, currentUserId]);
 
 
     // =========================
@@ -58,15 +68,15 @@ function UserBrowser({ type, userId }) {
     let users = [];
 
     if (type === "random") {
-        users = randomUsers;
+        users = randomUsers || [];
     }
 
     if (type === "shadows") {
-        users = shadowsByUser[userId] || [];
+        users = shadowsByUser[currentUserId] || [];
     }
 
     if (type === "shadowing") {
-        users = shadowingByUser[userId] || [];
+        users = shadowingByUser[currentUserId] || [];
     }
 
 
@@ -75,7 +85,6 @@ function UserBrowser({ type, userId }) {
     // =========================
 
     useEffect(() => {
-
         if (users.length === 0) return;
 
         const userIds = users.map(
@@ -86,7 +95,7 @@ function UserBrowser({ type, userId }) {
             getMultipleShadowStatus(userIds)
         );
 
-    }, [dispatch, users.length, type, userId]);
+    }, [dispatch, users.length, type, currentUserId]);
 
 
     // =========================
@@ -122,6 +131,10 @@ function UserBrowser({ type, userId }) {
     }
 
 
+    // =========================
+    // UI
+    // =========================
+
     return (
         <div className="user-browser">
 
@@ -131,13 +144,11 @@ function UserBrowser({ type, userId }) {
                 </div>
             )}
 
-
             {error && (
                 <div className="user-browser-error">
                     {error}
                 </div>
             )}
-
 
             {!loading && users.length === 0 && (
                 <div className="user-browser-empty">
@@ -145,9 +156,7 @@ function UserBrowser({ type, userId }) {
                 </div>
             )}
 
-
             {!loading && users.length > 0 && (
-
                 <div className="user-browser-list">
 
                     {users.map((user) => {
@@ -158,11 +167,13 @@ function UserBrowser({ type, userId }) {
                         const isLoading =
                             loadingByUser[user._id] || false;
 
-
                         return (
                             <div
                                 className="user-browser-card"
                                 key={user._id}
+                                onClick={() =>
+                                    navigate(`/user/${user._id}`)
+                                }
                             >
 
                                 <img
@@ -174,11 +185,9 @@ function UserBrowser({ type, userId }) {
                                     className="user-browser-avatar"
                                 />
 
-
                                 <span className="user-browser-username">
                                     {user.username}
                                 </span>
-
 
                                 <button
                                     className={`user-browser-button ${
@@ -187,24 +196,22 @@ function UserBrowser({ type, userId }) {
                                             : ""
                                     }`}
                                     disabled={isLoading}
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
 
                                         if (isShadowing) {
                                             handleUnshadow(user._id);
                                         } else {
                                             handleShadow(user._id);
                                         }
-
                                     }}
                                 >
-
                                     {isLoading
                                         ? "Processing..."
                                         : isShadowing
                                             ? "Unshadow"
                                             : "Shadow"
                                     }
-
                                 </button>
 
                             </div>

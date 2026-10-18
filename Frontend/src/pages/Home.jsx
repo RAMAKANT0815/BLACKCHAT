@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { MessageCircle } from "lucide-react";
 
-import { getAllPosts } from "../features/posts/postSlice";
+import { getAllPosts } from "../features/post/postSlice";
 import ReelCard from "../components/ReelCard";
+import "../pagesStyles/Home.css"
 
 const Home = () => {
 
@@ -52,7 +53,7 @@ const Home = () => {
 
                 <button
                     className="message-button"
-                    onClick={() => navigate("/messages")}
+                    onClick={() => navigate("/chat")}
                 >
                     <MessageCircle size={24} />
                 </button>

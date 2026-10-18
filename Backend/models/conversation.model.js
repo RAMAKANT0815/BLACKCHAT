@@ -1,65 +1,33 @@
-import mongoose from mongoose
-import { Schema } from "mongoose";
+
+import mongoose, { Schema } from "mongoose";
 
 const conversationSchema = new Schema(
     {
+        // Type of conversation
         type: {
             type: String,
-            enum: [
-                "private",
-                "group",
-                "community",
-                "temporary"
-            ],
-            required: true
+            enum: ["personal", "group", "temporary", "community"],
+            required: true,
+            default: "personal"
         },
 
+        // Group/community name; null for personal chats
         name: {
             type: String,
-            default: ""
+            trim: true,
+            default: null
         },
 
-        image: {
-            url: {
-                type: String,
-                default: ""
-            },
-            public_id: {
-                type: String,
-                default: ""
-            }
-        },
-
-        description: {
-            type: String,
-            default: ""
-        },
-
-        createdBy: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true
-        },
-
+        // Users who belong to this conversation
         members: [
             {
                 type: Schema.Types.ObjectId,
-                ref: "User"
-            }
-        ],
-        deletedAt: [
-            {
-                user: {
-                    type: Schema.Types.ObjectId,
-                    ref: "User"
-                },
-                at: {
-                    type: Date,
-                    default: Date.now
-                }
+                ref: "User",
+                required: true
             }
         ],
 
+        // Users permitted to perform admin actions
         admins: [
             {
                 type: Schema.Types.ObjectId,
@@ -67,19 +35,37 @@ const conversationSchema = new Schema(
             }
         ],
 
-        onlyAdminsCanSend: {
+        // Group-level permissions
+        settings: {
+            onlyAdminsCanSend: {
+                type: Boolean,
+                default: false
+            }
+        },
+
+        // Most recent message in this conversation
+        message: [{
+            type: Schema.Types.ObjectId,
+            ref: "Message",
+            default: null
+        }],
+
+        // Unique canonical key for personal chats
+        personalKey: {
+            type: String,
+            default: null
+        },
+
+        // Used by temporary rooms in a future phase
+        expiresAt: {
+            type: Date,
+            default: null
+        },
+
+        // Allows conversations to be deactivated
+        isActive: {
             type: Boolean,
-            default: false
-        },
-
-        startTime: {
-            type: Date,
-            default: null
-        },
-
-        endTime: {
-            type: Date,
-            default: null
+            default: true
         }
     },
     {
@@ -87,4 +73,7 @@ const conversationSchema = new Schema(
     }
 );
 
-export const Conversation = mongoose.model("Conversation", conversationSchema)
+export const Conversation = mongoose.model(
+    "Conversation",
+    conversationSchema
+);

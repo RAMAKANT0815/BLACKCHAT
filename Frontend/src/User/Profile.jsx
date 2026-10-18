@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "../UserStyles/Profile.css";
-import UserBrowser from "../components/UserBrowser";
 
 import {
     Pencil,
@@ -27,8 +26,11 @@ import {
 import { getMyLikes } from "../features/like/likeSlice";
 import { getMyComments } from "../features/comment/commentSlice";
 import { getMyPosts } from "../features/post/postSlice";
+import {
+    getShadows,
+    getShadowing
+} from "../features/shadow/shadowSlice";
 
-import { getShadowCount } from "../features/shadow/shadowSlice";
 
 
 function Profile() {
@@ -62,11 +64,11 @@ function Profile() {
     const { posts } = useSelector((state) => state.post);
 
 
-    const {
-        shadowCount,
-        shadowingCount
-    } = useSelector((state) => state.shadow);
+    const myShadows = useSelector((state) => state.shadow.shadowsByUser[user?._id]) || [];
+    const myShadowing = useSelector((state) => state.shadow.shadowingByUser[user?._id]) || [];
 
+    const shadowCount = myShadows.length;
+    const shadowingCount = myShadowing.length;
 
     useEffect(() => {
 
@@ -79,11 +81,10 @@ function Profile() {
 
 
     useEffect(() => {
+        if (!user?._id) return;
 
-        if (user?._id) {
-            dispatch(getShadowCount(user._id));
-        }
-
+        dispatch(getShadows(user._id));
+        dispatch(getShadowing(user._id));
     }, [dispatch, user?._id]);
 
 

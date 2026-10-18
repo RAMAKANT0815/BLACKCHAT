@@ -64,33 +64,6 @@ export const unshadowUser = createAsyncThunk(
     }
 );
 
-
-// =========================
-// GET RANDOM USERS
-// =========================
-
-export const getRandomUsers = createAsyncThunk(
-    "shadow/getRandomUsers",
-
-    async (_, { rejectWithValue }) => {
-        try {
-            const res = await axios.get(
-                "/api/v1/shadow/random",
-                { withCredentials: true }
-            );
-
-            return res.data;
-
-        } catch (error) {
-            return rejectWithValue(
-                error?.response?.data?.message ||
-                "Something went wrong"
-            );
-        }
-    }
-);
-
-
 // =========================
 // GET SHADOWS OF A USER
 // =========================
@@ -205,9 +178,6 @@ export const getMultipleShadowStatus = createAsyncThunk(
 
 
 const initialState = {
-
-    // Random users
-    randomUsers: [],
 
     // Different users' shadows
     shadowsByUser: {},
@@ -340,36 +310,6 @@ const shadowSlice = createSlice({
                     "Something went wrong";
             });
 
-
-        // =========================
-        // RANDOM USERS
-        // =========================
-
-        builder
-
-            .addCase(getRandomUsers.pending, (state) => {
-
-                state.loading = true;
-
-                state.error = null;
-            })
-
-            .addCase(getRandomUsers.fulfilled, (state, action) => {
-
-                state.loading = false;
-
-                state.randomUsers =
-                    action.payload.data.users;
-            })
-
-            .addCase(getRandomUsers.rejected, (state, action) => {
-
-                state.loading = false;
-
-                state.error = action.payload;
-            });
-
-
         // =========================
         // SHADOWS
         // =========================
@@ -391,7 +331,7 @@ const shadowSlice = createSlice({
                     action.payload.userId;
 
                 state.shadowsByUser[userId] =
-                    action.payload.data.users;
+                    action.payload.data.data.users;
             })
 
             .addCase(getShadows.rejected, (state, action) => {
@@ -423,7 +363,7 @@ const shadowSlice = createSlice({
                     action.payload.userId;
 
                 state.shadowingByUser[userId] =
-                    action.payload.data.users;
+                    action.payload.data.data.users;
             })
 
             .addCase(getShadowing.rejected, (state, action) => {
@@ -457,7 +397,7 @@ const shadowSlice = createSlice({
                 state.loadingByUser[userId] = false;
 
                 state.shadowStatusByUser[userId] =
-                    action.payload.data.isShadowing;
+                    action.payload.data.data.isShadowing;
             })
 
             .addCase(getShadowStatus.rejected, (state, action) => {
@@ -471,33 +411,35 @@ const shadowSlice = createSlice({
             });
         builder
             .addCase(
-            getMultipleShadowStatus.pending,
-            (state) => {
-                state.error = null;
-            }
-        )
+                getMultipleShadowStatus.pending,
+                (state) => {
 
-        .addCase(
-            getMultipleShadowStatus.fulfilled,
-            (state, action) => {
+                    state.error = null;
+                }
+            )
 
-                const status =
-                    action.payload.data.status;
+            .addCase(
+                getMultipleShadowStatus.fulfilled,
+                (state, action) => {
 
-                state.shadowStatusByUser = {
-                    ...state.shadowStatusByUser,
-                    ...status
-                };
-            }
-        )
+                    const status =
+                        action.payload.data.status;
 
-        .addCase(
-            getMultipleShadowStatus.rejected,
-            (state, action) => {
-                state.error = action.payload;
-            }
-        )
-            
+                    state.shadowStatusByUser = {
+                        ...state.shadowStatusByUser,
+                        ...status
+                    };
+                }
+            )
+
+            .addCase(
+                getMultipleShadowStatus.rejected,
+                (state, action) => {
+
+                    state.error = action.payload;
+                }
+            )
+                
 
     }
 });

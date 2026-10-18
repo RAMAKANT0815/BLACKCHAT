@@ -4,6 +4,7 @@ import postReducer from "../features/post/postSlice";
 import commentReducer from "../features/comment/commentSlice";
 import likeReducer from "../features/like/likeSlice"
 import shadowReducer from "../features/shadow/shadowSlice"
+import conversationReducer from "../features/conversation/conversationSlice"
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         post: postReducer,
         user: userReducer,
         like: likeReducer,
-        shadow: shadowReducer
+        shadow: shadowReducer,
+        conversation: conversationReducer
     },
 });

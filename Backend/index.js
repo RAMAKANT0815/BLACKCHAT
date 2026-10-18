@@ -4,11 +4,11 @@ import { app } from "./app.js";
 import http from "http";
 import { Server } from "socket.io";
 import { v2 as cloudinary } from "cloudinary";
+import jwt from "jsonwebtoken";
 import { User } from "./models/user.model.js";
-import cron from "node-cron";
-import { cleanupTemporaryChats } from "./utils/cleanupTemporaryChats.js";
 
 dotenv.config({ path: "./.env" });
+
 console.log("FRONTEND_URL =", process.env.FRONTEND_URL);
 
 cloudinary.config({
@@ -27,86 +27,85 @@ const io = new Server(server, {
     }
 });
 
-// Make io accessible globally in controllers via req.app.get("io")
+// Make Socket.IO accessible in controllers
 app.set("io", io);
 
-io.on("connection", (socket) => {
-    console.log("⚡ User connected:", socket.id);
+// Authenticate socket connections using the access-token cookie
+io.use(async (socket, next) => {
+    try {
+        const cookieHeader = socket.handshake.headers.cookie || "";
 
-    // --- EXISTING POST SOCKET HANDLERS ---
+        const tokenCookie = cookieHeader
+            .split(";")
+            .map((cookie) => cookie.trim())
+            .find((cookie) => cookie.startsWith("accessToken="));
+
+        if (!tokenCookie) {
+            return next(new Error("Authentication required"));
+        }
+
+        const token = decodeURIComponent(
+            tokenCookie.substring("accessToken=".length)
+        );
+
+        const decodedToken = jwt.verify(
+            token,
+            process.env.ACCESS_TOKEN_SECRET
+        );
+
+        const user = await User.findById(decodedToken._id).select("_id");
+
+        if (!user) {
+            return next(new Error("Invalid access token"));
+        }
+
+        // Set identity only from the verified JWT
+        socket.userId = user._id.toString();
+
+        next();
+    } catch (error) {
+        console.error("Socket authentication failed:", error.message);
+        next(new Error("Authentication failed"));
+    }
+});
+
+io.on("connection", (socket) => {
+    console.log(
+        "⚡ Authenticated user connected:",
+        socket.userId,
+        "Socket:",
+        socket.id
+    );
+
+    // Join the authenticated user's private room
+    socket.join(socket.userId);
+
+    // Existing post socket handlers
     socket.on("joinPost", (postId) => {
-        socket.join(postId);
+        if (typeof postId === "string" && postId) {
+            socket.join(postId);
+        }
     });
 
     socket.on("leavePost", (postId) => {
-        socket.leave(postId);
-    });
-
-    // --- NEW CHAT & PRESENCE SOCKET HANDLERS ---
-    
-    // 1. User setup & online status
-    socket.on("setup_user", async (userId) => {
-        if (!userId) return;
-        socket.join(userId);
-        socket.userId = userId;
-
-        // Mark user as online in database
-        await User.findByIdAndUpdate(userId, { isOnline: true });
-        io.emit("user_status_changed", { userId, isOnline: true });
-    });
-
-    // 2. Join specific chat room channel
-    socket.on("join_room", (roomId) => {
-        socket.join(roomId);
-        console.log(`User ${socket.id} joined chat room: ${roomId}`);
-    });
-
-    // 3. Leave chat room channel
-    socket.on("leave_room", (roomId) => {
-        socket.leave(roomId);
-        console.log(`User ${socket.id} left chat room: ${roomId}`);
-    });
-
-    // 4. Real-time message broadcast
-    socket.on("send_message", (newMessage) => {
-        const roomId = newMessage.room;
-        if (!roomId) return;
-
-        // Broadcast to all clients in the room except sender
-        socket.to(roomId).emit("message_received", newMessage);
-    });
-
-    // 5. Typing indicators
-    socket.on("typing", (roomId) => socket.to(roomId).emit("typing", roomId));
-    socket.on("stop_typing", (roomId) => socket.to(roomId).emit("stop_typing", roomId));
-
-    // --- DISCONNECT HANDLER ---
-    socket.on("disconnect", async () => {
-        console.log("🔥 User disconnected:", socket.id);
-
-        if (socket.userId) {
-            const lastSeenDate = new Date();
-            await User.findByIdAndUpdate(socket.userId, {
-                isOnline: false,
-                lastSeen: lastSeenDate
-            });
-
-            io.emit("user_status_changed", {
-                userId: socket.userId,
-                isOnline: false,
-                lastSeen: lastSeenDate
-            });
+        if (typeof postId === "string" && postId) {
+            socket.leave(postId);
         }
+    });
+
+    // Disconnect handling
+    socket.on("disconnect", () => {
+        console.log(
+            "User disconnected:",
+            socket.userId,
+            "Socket:",
+            socket.id
+        );
     });
 });
 
 connectDB()
     .then(() => {
-        cron.schedule("0 2 * * *", async () => {
-            console.log("🧹 Running temporary chat cleanup...");
-
-            await cleanupTemporaryChats();
-        });
         server.listen(
             process.env.PORT || 8000,
             () => {
@@ -116,8 +115,7 @@ connectDB()
             }
         );
     })
-    .catch((e) => {
-        console.log("Error while connecting to db", e);
+    .catch((error) => {
+        console.error("Error while connecting to DB:", error);
         process.exit(1);
     });
-

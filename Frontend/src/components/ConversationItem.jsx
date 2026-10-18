@@ -1,4 +1,5 @@
 import React from "react";
+import "../componentStyles/ConversationItem.css"
 
 function ConversationItem({ conversation, onClick }) {
 

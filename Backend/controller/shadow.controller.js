@@ -4,16 +4,6 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
-
-// Follow / Unfollow
-import asyncHandler from "../utils/asyncHandler.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import ApiError from "../utils/ApiError.js";
-
-import { Shadow } from "../models/shadow.model.js";
-import { User } from "../models/user.model.js";
-
-
 // SHADOW USER
 
 const shadowUser = asyncHandler(async (req, res) => {
@@ -186,6 +176,45 @@ const getShadowing = asyncHandler(async (req, res) => {
     );
 });
 
+// Get Shadows
+// Returns people who follow this user
+
+const getShadows = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new ApiError(
+            404,
+            "User not found"
+        );
+    }
+
+    const shadows = await Shadow.find({
+        shadowing: userId
+    })
+        .populate(
+            "shadow",
+            "username avatar bio"
+        )
+        .sort({ _id: -1 });
+
+    const users = shadows.map(
+        (item) => item.shadow
+    );
+
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            "Shadows fetched successfully",
+            {
+                users
+            }
+        )
+    );
+});
+
 const getShadowStatus = asyncHandler(async (req, res) => {
 
     const { userId } = req.params;
@@ -210,41 +239,6 @@ const getShadowStatus = asyncHandler(async (req, res) => {
             "Shadow status fetched successfully",
             {
                 isShadowing: !!shadow
-            }
-        )
-    );
-});
-
-const getRandomUsers = asyncHandler(async (req, res) => {
-
-    const users = await User.aggregate([
-        {
-            $match: {
-                _id: {
-                    $ne: req.user._id
-                }
-            }
-        },
-        {
-            $sample: {
-                size: 20
-            }
-        },
-        {
-            $project: {
-                username: 1,
-                avatar: 1,
-                bio: 1
-            }
-        }
-    ]);
-
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            "Random users fetched successfully",
-            {
-                users
             }
         )
     );
@@ -288,6 +282,5 @@ export {
     getShadows,
     getShadowing,
     getShadowStatus,
-    getRandomUsers,
     getMultipleShadowStatus
 };
